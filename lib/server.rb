@@ -5,16 +5,20 @@ class Server
 
   def initialize
     @running = true
+    @num_runs = 0
+    @tcp_server = TCPServer.new(9292)
   end
 
   def start
-    num_runs = 0
-    tcp_server = TCPServer.new(9292)
     while running? do
-      client = tcp_server.accept
-      num_runs += 1
+      client = @tcp_server.accept
 
-      client.puts generate_response(get_request(client), "Hello World! #{num_runs/2}")
+      request_lines = get_request(client)
+
+      if request_lines[0] == "GET / HTTP/1.1"
+        @num_runs += 1
+        generate_http_get_response(client, request_lines, "Hello World #{@num_runs}")
+      end
       client.close
     end
   end
@@ -31,7 +35,7 @@ class Server
     request_lines
   end
 
-  def generate_response(request_lines, response)
+  def generate_http_get_response(client, request_lines, response)
     headers = ["http/1.1 200 ok",
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
       "server: ruby",
@@ -39,7 +43,10 @@ class Server
       "content-length: #{response.length}"].join("<br>")
     output = "<html><head></head><body>#{request_lines}<br><br>#{headers}<br><br>
     #{response}</body></html>"
-    output
+    client.puts output
   end
 
 end
+
+server = Server.new
+server.start

@@ -3,11 +3,23 @@ require './lib/server'
 
 class ServerTest < Minitest::Test
   def setup
-    @server = Server.new
+    #@server = Server.new
   end
 
   def test_it_exists
-    assert @server
+    #@server.start
+    #assert @server
   end
 
+  def test_it_gets_a_request
+
+  end
+
+  def test_it_generates_a_http_get_response
+
+  end
+
+  def test_it_refuses_a_favicon_request
+  
+  end
 end
