@@ -41,18 +41,4 @@ class Server
     end
     request_data
   end
-
-#   def generate_diagnostic_response(client, request)
-#     response =
-#     "<pre>
-# Verb: #{request["Verb"]}
-# Path: #{request["Path"]}
-# Protocol: #{request["Protocol"]}
-# Host: #{request["Host"]}
-# Origin: #{client.addr[2]}
-# Accept: #{request["Accept"]}
-# </pre>"
-#     response
-#   end
-
 end
