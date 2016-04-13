@@ -1,36 +1,23 @@
+require 'socket'
+require './lib/router'
+
 class Server
-  require 'socket'
 
   attr_accessor :running, :tcp_server, :request_data
 
   def initialize
     @running = true
-    @num_runs = 0
     @tcp_server = TCPServer.new(9292)
+    @router = Router.new
   end
 
   def start
-    while running? do
+    while @running do
       client = @tcp_server.accept
-
       request = get_request(client)
-
-      if request["Path"] == "/" #TODO Replace with valid_request(request)
-        @num_runs += 1
-
-        response = generate_diagnostic_response(client, request)
-        header = generate_header(client, response)
-
-        client.puts header
-        client.puts response
-      end
-
+      @router.routes(client, request)
       client.close
     end
-  end
-
-  def running?
-    @running
   end
 
   def get_request(client)
@@ -38,7 +25,6 @@ class Server
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
-
     parse_request(request_lines)
   end
 
@@ -55,27 +41,4 @@ class Server
     end
     request_data
   end
-
-  def generate_header(client, response)
-    header = ["http/1.1 200 ok",
-      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-      "server: ruby",
-      "content-type: text/html; charset=iso-8859-1",
-      "content-length: #{response.length}\r\n\r\n"].join("\n")
-    header
-  end
-
-  def generate_diagnostic_response(client, request)
-    response =
-    "<pre>
-Verb: #{request["Verb"]}
-Path: #{request["Path"]}
-Protocol: #{request["Protocol"]}
-Host: #{request["Host"]}
-Origin: #{client.addr[2]}
-Accept: #{request["Accept"]}
-</pre>"
-    response
-  end
-
 end
