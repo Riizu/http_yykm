@@ -7,7 +7,7 @@ class Router
     @num_routes = 0
   end
 
-  def routes(client, request)
+  def route(client, request, params=nil)
     @num_routes += 1
 
     case request["Path"]
@@ -23,6 +23,8 @@ class Router
     when "/shutdown"
       # @SHUTDOWN CONTROLLER.shutdown (exit inside the controller)
       @output_view.shutdown(client, @num_routes)
+    when "/word_search"
+      #@output_view.generate_word_search_response(client, request, params)
     else
       puts "Received unknown request!"
     end
