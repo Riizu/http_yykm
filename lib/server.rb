@@ -1,5 +1,6 @@
 require 'socket'
 require './lib/router'
+require './lib/parser'
 
 class Server
 
@@ -9,13 +10,15 @@ class Server
     @running = true
     @tcp_server = TCPServer.new(9292)
     @router = Router.new
+    @parser = Parser.new
   end
 
   def start
     while @running do
       client = @tcp_server.accept
       request = get_request(client)
-      @router.routes(client, request)
+      parsed_request = @parser.parse_request(request)
+      @router.route(client, parsed_request)
       client.close
     end
   end
@@ -25,20 +28,6 @@ class Server
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
-    parse_request(request_lines)
-  end
-
-  def parse_request(request_lines)
-    request_data = {}
-    verb_path_line = request_lines.shift.split(" ")
-    request_data["Verb"] = verb_path_line[0]
-    request_data["Path"] = verb_path_line[1]
-    request_data["Protocol"] = verb_path_line[2]
-
-    request_lines.each do |line|
-      split_line = line.split(": ")
-      request_data[split_line[0]] = split_line[1]
-    end
-    request_data
+    request_lines
   end
 end

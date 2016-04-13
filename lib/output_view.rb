@@ -38,6 +38,18 @@ class OutputView
     client.puts response
   end
 
+  def generate_word_search_response(client, parsed_request)
+    file='/usr/share/dict/words'
+    array = File.readlines(file).map do |line|
+      line.chomp
+    end
+    if array.include?(parsed_request["Params"].values[0])
+      client.puts "#{parsed_request["Params"].values[0]} is a known word!"
+    else
+      client.puts "#{parsed_request["Params"].values[0]} is a unknown word!"
+    end
+  end
+
   def shutdown(client, num_routes)
     response = "Total requests: #{num_routes}"
     client.puts generate_header(client, response)
