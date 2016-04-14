@@ -1,6 +1,7 @@
 require 'socket'
 require './lib/router'
 require './lib/parser'
+require 'pp'
 
 class Server
 
