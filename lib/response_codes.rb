@@ -7,8 +7,8 @@ module ResponseCodes
     "301 Moved Permanently"
   end
 
-  def self.found
-    "302 Found"
+  def self.redirect
+    "302 Moved Temporarily"
   end
 
   def self.unauthorized

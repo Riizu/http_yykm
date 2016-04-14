@@ -19,7 +19,7 @@ class Router
     # DEBUG:
     puts "Number of requests: #{@num_routes}"
     pp parsed_request
-    puts
+    print "\n"  
 
     case parsed_request["Path"]
     when "/"

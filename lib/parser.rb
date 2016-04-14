@@ -1,5 +1,6 @@
 class Parser
   def parse_request(request_lines)
+    puts "request_lines #{request_lines}"
     request_hash = parse_verb_path_protocol(request_lines)
     parse_params(request_hash) if params_exist?(request_hash)
     request_hash = parse_remaining_data(request_lines, request_hash)
