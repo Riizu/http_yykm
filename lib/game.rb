@@ -5,21 +5,37 @@ class Game
 
 include ResponseCodes
 
+  attr_reader :running
+
   def initialize
     @guesses = 0
     @current_guess = nil
     @secret_number = rand(100)
+    @running = false
   end
 
   def start_game(client, parsed_request)
+    if is_game_started?
+      client.puts "http/1.1 #{ResponseCodes.forbidden}\n\r"
+      client.puts "Welcome to Guess the Number!\n"
+      client.puts "Game Already started!\n"
+    else
+      @running = true
+    end
+
     case parsed_request["Verb"]
     when "POST"
+      client.puts "http/1.1 #{ResponseCodes.moved}\r\n\r\n"
       client.puts "Welcome to Guess the Number!\n"\
                   "Please guess a number between 0 and 100\n"\
                   "Good Luck"
-      client.puts "DEBUG: Secret_number is #{@secret_number}"
-    else ResponseCodes.not_found
+    else
+      client.puts "http/1.1 #{ResponseCodes.not_found}\n\r"
     end
+  end
+
+  def is_game_started?
+    @running
   end
 
   def read_guess(client, parsed_request)
@@ -29,21 +45,29 @@ include ResponseCodes
   def game(client, parsed_request)
     @guesses += 1
     case parsed_request["Verb"]
-    when "GET"
-      get_response(client, parsed_request)
-    when "POST"
-        @current_guess = read_guess(client, parsed_request).to_i
-        puts "This is current guess: #{@current_guess}"
-        post_response(client, parsed_request)
+    when "GET" then game_get(client, parsed_request)
+    when "POST" then game_post(client, parsed_request)
     else ResponseCodes.not_found
     end
   end
 
+  def game_get(client, parsed_request)
+    get_response(client, parsed_request)
+  end
+
+  def game_post(client, parsed_request)
+    @current_guess = read_guess(client, parsed_request).to_i
+    puts "This is current guess: #{@current_guess}"
+    post_response(client, parsed_request)
+  end
+
+
   def get_response(client, parsed_request)
-    client.puts "http/1.1 #{ResponseCodes.ok}\n\r"
-    client.puts "You've guessed #{@guesses} times"
-    client.puts "Invalid Guess: #{invalid_guess?}"
+    client.puts "http/1.1 #{ResponseCodes.ok}\r\n\n\r"
+    client.puts "You've guessed #{@guesses} times\n\r"
+    client.puts "Invalid Guess: #{invalid_guess?}\n\r"
     client.puts check_guess
+    puts "THis is the last thing that happens"
   end
 
   def post_response(client, parsed_request)
@@ -69,8 +93,7 @@ include ResponseCodes
       response = "Your guess was too high"
     elsif @current_guess < @secret_number
       response = "Your guess was too low"
-    else
     end
-     "this is your current guess: #{@current_guess}" + "\n" + response
+     "this is your current guess: #{@current_guess}" + "\n" + response + "\n\r"
   end
 end

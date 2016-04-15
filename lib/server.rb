@@ -2,10 +2,11 @@ require 'socket'
 require './lib/router'
 require './lib/parser'
 require 'pp'
+require 'pry'
 
 class Server
 
-  attr_accessor :running, :tcp_server, :request_data
+  # attr_accessor :running, :tcp_server, :request_data
 
   def initialize
     @running = true
@@ -18,9 +19,10 @@ class Server
     while @running do
       client = @tcp_server.accept
       request = get_request(client)
-      puts "Raw request #{request}"
+      # puts "Raw request #{request}"
       parsed_request = @parser.parse_request(request)
       @router.route(client, parsed_request)
+      # puts "Closing session..."
       client.close
     end
   end
@@ -32,4 +34,5 @@ class Server
     end
     request_lines
   end
+
 end

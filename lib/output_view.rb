@@ -21,12 +21,14 @@ class OutputView
   end
 
   def generate_diagnostic_response(client, request)
-    response = "<pre><br>Verb: #{request["Verb"]}<br>"\
-               "Path: #{request["Path"]}<br>"\
-               "Protocol: #{request["Protocol"]}<br>"\
-               "Host: #{request["Host"]}<br>"\
-               "Origin: #{client.addr[2]}<br>"\
-               "Accept: #{request["Accept"]}<br></pre>"
+    response = "<pre>\n"\
+               "Verb: #{request["Verb"]}\n"\
+               "Path: #{request["Path"]}\n"\
+               "Protocol: #{request["Protocol"]}\n"\
+               "Host: #{request["Host"]}\n"\
+               "Origin: #{client.addr[2]}\n"\
+               "Accept: #{request["Accept"]}\n"\
+               "</pre>"
 
     client.puts generate_header(response, ResponseCodes.ok)
     client.puts response

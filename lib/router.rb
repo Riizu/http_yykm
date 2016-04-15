@@ -16,10 +16,10 @@ class Router
   def route(client, parsed_request)
     @num_routes += 1
 
-    # DEBUG:
-    puts "Number of requests: #{@num_routes}"
-    pp parsed_request
-    print "\n"  
+    # CONSOLE DEBUG:
+    # puts "Number of requests: #{@num_routes}"
+    # pp parsed_request
+    # print "\n"
 
     case parsed_request["Path"]
     when "/"
@@ -38,8 +38,10 @@ class Router
       @game.start_game(client, parsed_request)
     when "/game"
       @game.game(client, parsed_request)
+    when "/force_error"
+      @output_view.error(client, "500 Internal Server Error", ResponseCodes.internal_server_error)
     else
-      @output_view.error(client, "404 not found", ResponseCodes.not_found)
+      @output_view.error(client, "404 Not found", ResponseCodes.not_found)
     end
 
   end
