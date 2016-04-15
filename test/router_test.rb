@@ -15,7 +15,7 @@ class RouterTest < Minitest::Test
   def test_valid_routes
     assert @router.route(@client, {"Path"=>"/hello"}).include?("Hello, World")
     assert @router.route(@client, {"Path"=>"/datetime"}).include?("2016")
-    assert @router.route(@client, {"Path"=>"/force_error"}).include?("500")
+    assert @router.route(@client, {"Path"=>"/force_error"}).include?("sys_error")
   end
 
   def test_invalid_routes
