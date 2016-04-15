@@ -16,7 +16,7 @@ include ResponseCodes
 
   def start_game(client, parsed_request)
     if is_game_started?
-      client.puts "http/1.1 #{ResponseCodes.forbidden}\n\r"
+      client.puts "http/1.1 #{ResponseCodes.forbidden}\r\n\r\n"
       client.puts "Welcome to Guess the Number!\n"
       client.puts "Game Already started!\n"
     else
@@ -57,7 +57,7 @@ include ResponseCodes
 
   def game_post(client, parsed_request)
     @current_guess = read_guess(client, parsed_request).to_i
-    puts "This is current guess: #{@current_guess}"
+    puts "Current guess: #{@current_guess}"
     post_response(client, parsed_request)
   end
 
@@ -65,9 +65,7 @@ include ResponseCodes
   def get_response(client, parsed_request)
     client.puts "http/1.1 #{ResponseCodes.ok}\r\n\n\r"
     client.puts "You've guessed #{@guesses} times\n\r"
-    client.puts "Invalid Guess: #{invalid_guess?}\n\r"
     client.puts check_guess
-    puts "THis is the last thing that happens"
   end
 
   def post_response(client, parsed_request)

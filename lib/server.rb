@@ -19,10 +19,8 @@ class Server
     while @running do
       client = @tcp_server.accept
       request = get_request(client)
-      # puts "Raw request #{request}"
       parsed_request = @parser.parse_request(request)
       @router.route(client, parsed_request)
-      # puts "Closing session..."
       client.close
     end
   end

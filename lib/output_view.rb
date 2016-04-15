@@ -81,4 +81,18 @@ class OutputView
     client.puts response
   end
 
+
+  def sys_error(client, response, code)
+    begin
+      raise SystemError
+    rescue Exception => e
+      msg = e.backtrace.join("\n")
+    end
+    client.puts "HTTP1.1 #{ResponseCodes.internal_server_error}\r\n\r\n"
+    client.puts response
+    client.puts msg
+  end
+
 end
+
+#class SystemError < Exception; end
