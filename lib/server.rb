@@ -1,10 +1,12 @@
 require 'socket'
 require './lib/router'
 require './lib/parser'
+require 'pp'
+require 'pry'
 
 class Server
 
-  attr_accessor :running, :tcp_server, :request_data
+  # attr_accessor :running, :tcp_server, :request_data
 
   def initialize
     @running = true
@@ -30,4 +32,5 @@ class Server
     end
     request_lines
   end
+
 end
