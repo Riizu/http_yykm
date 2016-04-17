@@ -50,7 +50,6 @@ class Game
   def game_post(client, parsed_request)
     @guesses += 1
     @current_guess = read_guess(client, parsed_request).to_i
-    puts "Current guess: #{@current_guess}"
     post_response(client, parsed_request)
   end
 

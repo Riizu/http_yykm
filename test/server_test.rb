@@ -25,5 +25,4 @@ class ServerTest < Minitest::Test
       "</pre>"]
     assert_equal expected_responses, responses
   end
-
 end

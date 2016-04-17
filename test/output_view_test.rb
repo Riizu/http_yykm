@@ -2,7 +2,6 @@ require './test/test_helper'
 require './lib/output_view'
 
 class OutputViewTest < Minitest::Test
-
   def setup
     @output = OutputView.new
     @client = Client.new
@@ -28,15 +27,7 @@ class OutputViewTest < Minitest::Test
     assert @output.generate_word_search_response(@client, {"Params" => {"word"=>"hello"}})
   end
 
-
   def test_error_response
     assert @output.error(@client, "Example response", "404").include?("Example")
-  end
-
-end
-
-class Client
-  def puts(stuff)
-    return stuff
   end
 end

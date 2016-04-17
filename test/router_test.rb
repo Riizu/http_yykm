@@ -21,7 +21,6 @@ class RouterTest < Minitest::Test
   def test_invalid_routes
     assert @router.route(@client, {"Path"=>"/asdsadfas"}).include?("404")
   end
-
 end
 
 class Client

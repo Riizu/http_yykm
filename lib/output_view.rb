@@ -4,7 +4,7 @@ class OutputView
   include ResponseCodes
 
   def initialize
-    @count = 0
+    @hello_count = 0
   end
 
   def generate_header(response, code)
@@ -30,7 +30,7 @@ class OutputView
   end
 
   def generate_hello_response(client)
-    @count += 1
+    @hello_count += 1
     response = "Hello, World! #{@count}"
     client.puts generate_header(response, ResponseCodes.ok)
     client.puts response
@@ -87,7 +87,4 @@ class OutputView
     client.puts response
     client.puts msg
   end
-
 end
-
-#class SystemError < Exception; end
