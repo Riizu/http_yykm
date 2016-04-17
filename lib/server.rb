@@ -5,9 +5,6 @@ require 'pp'
 require 'pry'
 
 class Server
-
-  # attr_accessor :running, :tcp_server, :request_data
-
   def initialize
     @running = true
     @tcp_server = TCPServer.new(9292)

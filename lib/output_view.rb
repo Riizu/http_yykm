@@ -7,11 +7,6 @@ class OutputView
     @count = 0
   end
 
-  # def output(client, OutputView.send(method, params), code)
-  #   client.puts generate_header(response, code)
-  #   client.puts response
-  # end
-
   def generate_header(response, code)
     ["http/1.1 #{code}",
       "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",

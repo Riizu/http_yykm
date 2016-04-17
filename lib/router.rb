@@ -4,7 +4,6 @@ require './lib/response_codes'
 require 'pp'
 
 class Router
-
   include ResponseCodes
 
   def initialize

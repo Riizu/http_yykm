@@ -2,48 +2,35 @@ require './lib/response_codes'
 require './lib/output_view'
 
 class Game
-
-include ResponseCodes
+  include ResponseCodes
 
   attr_reader :running
 
   def initialize
     @guesses = 0
-    @current_guess = nil
-    @secret_number = rand(100)
+    @current_guess = 0
+    @secret_number = 0
     @running = false
   end
 
   def start_game(client, parsed_request)
-    if is_game_started?
-      client.puts "http/1.1 #{ResponseCodes.forbidden}\r\n\r\n"
-      client.puts "Welcome to Guess the Number!\n"
-      client.puts "Game Already started!\n"
-    else
-      @running = true
-    end
-
     case parsed_request["Verb"]
     when "POST"
-      client.puts "http/1.1 #{ResponseCodes.moved}\r\n\r\n"
-      client.puts "Welcome to Guess the Number!\n"\
-                  "Please guess a number between 0 and 100\n"\
-                  "Good Luck"
+      @running = true
+      @current_guess = 0
+      @secret_number = rand(100)
+      client.puts "http/1.1 #{ResponseCodes.ok}\r\n\r\n"
+      client.puts "Good Luck!"
     else
       client.puts "http/1.1 #{ResponseCodes.not_found}\n\r"
     end
   end
 
-  def is_game_started?
-    @running
-  end
-
   def read_guess(client, parsed_request)
-    guess = client.read(parsed_request["Content-Length"].to_i)
+    client.read(parsed_request["Content-Length"].to_i)
   end
 
   def game(client, parsed_request)
-    @guesses += 1
     case parsed_request["Verb"]
     when "GET" then game_get(client, parsed_request)
     when "POST" then game_post(client, parsed_request)
@@ -56,6 +43,7 @@ include ResponseCodes
   end
 
   def game_post(client, parsed_request)
+    @guesses += 1
     @current_guess = read_guess(client, parsed_request).to_i
     puts "Current guess: #{@current_guess}"
     post_response(client, parsed_request)
