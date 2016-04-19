@@ -19,7 +19,4 @@ class GameUnitTest < Minitest::Test
     "Accept"=>"*/*","Connection"=>"close","Host"=>"127.0.0.1:9292",\
     "Content-Type"=>"application/x-www-form-urlencoded"}
   end
-
-
-
 end

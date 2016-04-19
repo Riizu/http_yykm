@@ -4,7 +4,6 @@ require './lib/response_codes'
 require 'pp'
 
 class Router
-
   include ResponseCodes
 
   def initialize
@@ -15,12 +14,7 @@ class Router
 
   def route(client, parsed_request)
     @num_routes += 1
-
-    # CONSOLE DEBUG:
-     puts "Number of requests: #{@num_routes}"
-     pp parsed_request
-     print "\n"
-
+    
     case parsed_request["Path"]
     when "/"
       @output_view.generate_diagnostic_response(client, parsed_request)

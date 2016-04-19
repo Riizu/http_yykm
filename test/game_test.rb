@@ -15,7 +15,7 @@ class GameTest < Minitest::Test
     response = @conn.post do |req|
       req.url '/start_game'
     end
-    assert response.body.include?("Welcome")
+    assert response.body.include?("Good Luck!")
   end
 
   def test_guess_causes_redirect
@@ -40,5 +40,4 @@ class GameTest < Minitest::Test
     end
     assert 403, response.status
   end
-
 end
